@@ -133,12 +133,6 @@
   <data name="AT_UP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Sprites\AT_UP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BlockDestructible" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sprites\BlockDestructible.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BlockNonDestructible" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sprites\BlockNonDestructible.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Bombe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Sprites\Bombe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -165,9 +159,6 @@
   </data>
   <data name="T_UP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Sprites\T_UP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="World" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sprites\World.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Blood" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Sprites\Blood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

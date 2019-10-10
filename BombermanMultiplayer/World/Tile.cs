@@ -25,7 +25,13 @@ namespace BombermanMultiplayer
         [NonSerialized]
         public Bomb bomb = null;
 
-        public int FireTime = 500; 
+        public int FireTime = 500;
+
+        public int x;
+        public int y;
+
+        public float width;
+        public float height;
 
         #region Accessors
 
@@ -38,6 +44,10 @@ namespace BombermanMultiplayer
         {
             Walkable = walkable;
             Destroyable = destroyable;
+            x = x_;
+            y = y_;
+            width = frameWidth_;
+            height = frameHeigt_;
         }
 
 
@@ -74,23 +84,14 @@ namespace BombermanMultiplayer
             }
         }
 
-        public new void Draw(Graphics gr)
+        public new void Draw(Graphics gr, Pen pen)
         {
-            if (this.Sprite != null)
-            {
-                gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                gr.DrawRectangle(Pens.Red, this.Source);
-               
-            }
+            gr.DrawRectangle(pen, (x + (width / 2) - 10), (y + (height / 2) - 10), (width / 2), (height / 2));
+
             if (BonusHere != null)
             {
                 this.BonusHere.Draw(gr);
-
             }
         }
-
     }
-
-    
-
 }

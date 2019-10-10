@@ -111,9 +111,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sprites\World.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Sprites\AT_DOWN.png" />
   </ItemGroup>
   <ItemGroup>

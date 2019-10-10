@@ -35,8 +35,6 @@ namespace BombermanMultiplayer
                 }
             }
 
-            game.world.loadBackground(Properties.Resources.World);
-            game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
             game.player1.LoadSprite(Properties.Resources.AT_DOWN);
             game.player2.LoadSprite(Properties.Resources.T_UP);
 
@@ -54,7 +52,7 @@ namespace BombermanMultiplayer
         public void Draw()
         {
             gr.Clear(pbGame.BackColor);
-            game.world.refreshTileSprites();
+            game.world.refreshTileSprites(gr);
 
             game.world.Draw(gr);
 
@@ -270,8 +268,6 @@ namespace BombermanMultiplayer
                     try
                     {
                         game.LoadGame(dlg.FileName);
-                        game.world.loadBackground(Properties.Resources.World);
-                        game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
                         game.player1.LoadSprite(Properties.Resources.AT_DOWN);
                         game.player2.LoadSprite(Properties.Resources.T_UP);
                         Draw();
