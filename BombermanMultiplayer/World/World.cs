@@ -12,45 +12,70 @@ using System.Diagnostics;
 namespace BombermanMultiplayer
 {
     [Serializable]
-    public class World 
+    public class World
     {
         public Tile[,] MapGrid;
+        [NonSerialized]
+        private Image Background_;
+
+
+        public Image Background
+        {
+            get
+            {
+                return Background_;
+            }
+
+            set
+            {
+                Background_ = value;
+            }
+        }
+
 
         public void Draw(Graphics gr)
         {
-            Pen blackPen = new Pen(Color.White, gr.VisibleClipBounds.Width);
-            gr.DrawRectangle(blackPen, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
-             
+            if (Background != null)
+             {
+                Pen blackPen = new Pen(Color.Brown, gr.VisibleClipBounds.Width);
+                gr.DrawRectangle(blackPen, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
+             }
+
             for (int i = 0; i < MapGrid.GetLength(0); i++) //Ligne
             {
                 for (int j = 0; j < MapGrid.GetLength(1); j++) //Colonne
                 {
-                    Pen pen1 = new Pen(Color.Purple, MapGrid[i, j].width/2);
-                    MapGrid[i, j].Draw(gr, pen1);
+                    MapGrid[i, j].Draw(gr);
                 }
             }
 
+        }
+
+        public void loadBackground(Image background)
+        {
+            this.Background = background;
+        }
+        
+        public void loadSpriteTile(Image spriteDestroyableTile, Image spriteUndestroyableTile)
+        {
             for (int i = 0; i < MapGrid.GetLength(0); i++) //Ligne
             {
                 for (int j = 0; j < MapGrid.GetLength(1); j++) //Colonne
                 {
                     if (MapGrid[i, j].Destroyable)
                     {
-                        Pen pen1 = new Pen(Color.Green, MapGrid[i, j].width/2);
-                        MapGrid[i, j].Draw(gr, pen1);
+                        MapGrid[i, j].LoadSprite(spriteDestroyableTile);
                     }
                     else if (!MapGrid[i, j].Walkable && !MapGrid[i, j].Destroyable)
                     {
-                        Pen pen2 = new Pen(Color.Yellow, MapGrid[i, j].width/2);
-                        MapGrid[i, j].Draw(gr, pen2);
+                        MapGrid[i, j].LoadSprite(spriteUndestroyableTile);
                     }
                 }
             }
 
         }
 
-
-        public void refreshTileSprites(Graphics gr)
+        public void refreshTileSprites()
         {
             for (int i = 0; i < MapGrid.GetLength(0); i++) //Ligne
             {
@@ -58,18 +83,15 @@ namespace BombermanMultiplayer
                 {
                     if (MapGrid[i, j].Walkable && !MapGrid[i, j].Destroyable)
                     {
-                        Pen pen1 = new Pen(Color.White, MapGrid[i, j].width/2);
-                        MapGrid[i, j].Draw(gr, pen1);
+                        MapGrid[i, j].UnloadSprite();
                     }
                     if (MapGrid[i, j].Fire)
                     {
-                        Pen pen1 = new Pen(Color.Red, MapGrid[i, j].width/2);
-                        MapGrid[i, j].Draw(gr, pen1);
+                        MapGrid[i, j].LoadSprite(Properties.Resources.Fire);
                     }
                     else if (MapGrid[i, j].Walkable && !MapGrid[i, j].Fire)
                     {
-                        Pen pen1 = new Pen(Color.White, MapGrid[i, j].width/2);
-                        MapGrid[i, j].Draw(gr, pen1);
+                        MapGrid[i, j].UnloadSprite();
                     }
 
                 }
@@ -124,9 +146,19 @@ namespace BombermanMultiplayer
                                 MapGrid[i, j] = new Tile(j * TILE_WIDTH, i * TILE_HEIGHT, totalFrameTile, TILE_WIDTH, TILE_HEIGHT, true, false);
 
                         }
+                            
+
                     }
+                    
+
                 }
             }
         }
+
+
+        
+
+
+
     }
 }

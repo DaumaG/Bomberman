@@ -505,126 +505,43 @@ namespace BombermanMultiplayer
         }
         //Collision management
 
-        //Check collision between two rectangles
-        public bool CheckCollisionRectangle(Rectangle Object1, Rectangle Object2)
-        {
-
-            if ((Object2.X >= Object1.X + Object1.Width)      // trop à droite
-                || (Object2.X + Object2.Width <= Object1.X) // trop à gauche
-                || (Object2.Y >= Object1.Y + Object1.Height) // trop en bas
-                || (Object2.Y + Object2.Height <= Object1.Y))  // trop en haut
-                return false;
-            else
-                return true;
-            //True if there's a collision
-
-        }
+        
         public bool CheckCollisionPlayer(Player movingPlayer, Player player2, Tile[,] map, Player.MovementDirection direction)
         {
             int lig = movingPlayer.CasePosition[0];
             int col = movingPlayer.CasePosition[1];
 
-            //Check for environnement collision (map)
+            //Check for environnement collision (map) (Strategy design pattern)
             switch (direction)
             {
                 case Player.MovementDirection.UP:
                     {
-                        //UP
-                        //Temporary version of player collision box with expected position after deplacement
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y - movingPlayer.Vitesse, movingPlayer.Source.Width, movingPlayer.Source.Height);
-
-                        if (!map[lig - 1, col - 1].Walkable || map[lig - 1, col - 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig - 1, col - 1].Source))
-                                return false;
-                        }
-                        if (!map[lig - 1, col].Walkable || map[lig - 1, col].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig - 1, col].Source))
-                                return false;
-                        }
-                        if (!map[lig - 1, col + 1].Walkable || map[lig - 1, col + 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig - 1, col + 1].Source))
-                                return false;
-                        }
-                        if (CheckCollisionRectangle(rect, player2.Source))
+                        if (!new CheckCollision(new CheckUpStrategy()).CheckDirection(movingPlayer, player2, map))
                             return false;
                     }
                     break;
                 case Player.MovementDirection.DOWN:
                     {
-                        //DOWN
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y + movingPlayer.Vitesse, movingPlayer.Source.Width, movingPlayer.Source.Height);
-
-                        if (!map[lig + 1, col - 1].Walkable || map[lig + 1, col - 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig + 1, col - 1].Source))
-                                return false;
-                        }
-                        if (!map[lig + 1, col].Walkable || map[lig + 1, col].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig + 1, col].Source))
-                                return false;
-                        }
-                        if (!map[lig + 1, col + 1].Walkable || map[lig + 1, col + 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig + 1, col + 1].Source))
-                                return false;
-                        }
-                        if (CheckCollisionRectangle(rect, player2.Source))
+                        if (!new CheckCollision(new CheckDownStrategy()).CheckDirection(movingPlayer, player2, map))
                             return false;
                     }
                     break;
                 case Player.MovementDirection.LEFT:
                     {
-                        //LEFT
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X - movingPlayer.Vitesse, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
-                        if (!map[lig - 1, col - 1].Walkable || map[lig - 1, col - 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig - 1, col - 1].Source))
-                                return false;
-                        }
-                        if (!map[lig, col - 1].Walkable || map[lig, col - 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig, col - 1].Source))
-                                return false;
-                        }
-                        if (!map[lig + 1, col - 1].Walkable || map[lig + 1, col - 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig + 1, col - 1].Source))
-                                return false;
-                        }
-                        if (CheckCollisionRectangle(rect, player2.Source))
+                        if (!new CheckCollision(new CheckLeftStrategy()).CheckDirection(movingPlayer, player2, map))
                             return false;
                     }
                     break;
                 case Player.MovementDirection.RIGHT:
                     {
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X + movingPlayer.Vitesse, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
-                        //RIGHT
-                        if (!map[lig - 1, col + 1].Walkable || map[lig - 1, col + 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig - 1, col + 1].Source))
-                                return false;
-                        }
-                        if (!map[lig, col + 1].Walkable || map[lig, col + 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig, col + 1].Source))
-                                return false;
-                        }
-                        if (!map[lig + 1, col + 1].Walkable || map[lig + 1, col + 1].Occupied)
-                        {
-                            if (CheckCollisionRectangle(rect, map[lig + 1, col + 1].Source))
-                                return false;
-                        }
-                        if (CheckCollisionRectangle(rect, player2.Source))
+                        if (!new CheckCollision(new CheckRightStrategy()).CheckDirection(movingPlayer, player2, map))
                             return false;
                     }
                     break;
                 default:
                     break;
             }
+            
             return true;
         }
         private void LogicTimer_Elapsed(object sender, ElapsedEventArgs e)

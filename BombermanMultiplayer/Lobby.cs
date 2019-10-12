@@ -14,8 +14,6 @@ namespace BombermanMultiplayer
 {
     public partial class Lobby : Form
     {
-        //Server part
-        Server server;
         Task runServer;
         //Used to cancel a task during her execution
         CancellationTokenSource cts;
@@ -60,33 +58,18 @@ namespace BombermanMultiplayer
                 return;
             }
 
-            int port = 30000;
-
-            try
-            {
-                int.TryParse(tbPortConnect.Text, out port);
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show("Erreur : " + ex.Message, "Problème", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-
-
-            server = new Server(port);
-
             cts = new CancellationTokenSource();
             string fileName = tbGameToLoad.Text;
 
             //If there's a game to load
             if (fileName.Length > 0)
             {
-                runServer = Task.Run(() => server.Launch(cts.Token, fileName), cts.Token);
+                runServer = Task.Run(() => Server.Instance.Launch(cts.Token, fileName), cts.Token);
             }
             else
             {
                 //Default
-                runServer = Task.Run(() => server.Launch(cts.Token), cts.Token);
+                runServer = Task.Run(() => Server.Instance.Launch(cts.Token), cts.Token);
             }
 
             lbServerOnline.Visible = true;
@@ -390,9 +373,9 @@ namespace BombermanMultiplayer
                             this.ConnectionTimer.Stop();
                             this.client.Disconnect();
 
-                            if (server != null)
+                            if (Server.Instance != null)
                             {
-                                if (server.IsRunning && !cts.IsCancellationRequested)
+                                if (Server.Instance.IsRunning && !cts.IsCancellationRequested)
                                 {
                                     cts.Cancel();
                                     try
@@ -489,6 +472,8 @@ namespace BombermanMultiplayer
                 }
             }
 
+            //game.world.loadBackground(Properties.Resources.World);
+            game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
             game.player1.LoadSprite(Properties.Resources.AT_DOWN);
             game.player2.LoadSprite(Properties.Resources.T_UP);
 
@@ -707,9 +692,9 @@ namespace BombermanMultiplayer
                         Thread.Sleep(50);
                         this.client.Disconnect();
                     }
-                if (server != null)
+                if (Server.Instance != null)
                 {
-                    if (server.IsRunning && !cts.IsCancellationRequested)
+                    if (Server.Instance.IsRunning && !cts.IsCancellationRequested)
                     {
                         cts.Cancel();
                         try
@@ -735,11 +720,11 @@ namespace BombermanMultiplayer
                 Thread.Sleep(50);
                 this.client.Disconnect();
 
-                if (server != null)
+                if (Server.Instance != null)
                 {
-                    if (server.IsRunning && !cts.IsCancellationRequested)
+                    if (Server.Instance.IsRunning && !cts.IsCancellationRequested)
                     {
-                        this.server.SendData(new Packet(Sender.Server, PacketType.CloseConnection, 1));
+                        Server.Instance.SendData(new Packet(Sender.Server, PacketType.CloseConnection, 1));
                         cts.Cancel();
                         try
                         {
@@ -864,12 +849,12 @@ namespace BombermanMultiplayer
             this.client.sendData(new Packet(Station, PacketType.CloseConnection, 1));
             this.client.Disconnect();
 
-            if (server != null)
+            if (Server.Instance != null)
             {
-                if (server.IsRunning && !cts.IsCancellationRequested)
+                if (Server.Instance.IsRunning && !cts.IsCancellationRequested)
                 {
 
-                    server.SendData(new Packet(Sender.Server, PacketType.CloseConnection, 1));
+                    Server.Instance.SendData(new Packet(Sender.Server, PacketType.CloseConnection, 1));
                     cts.Cancel();
                     try
                     {

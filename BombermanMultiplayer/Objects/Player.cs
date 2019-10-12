@@ -95,7 +95,7 @@ namespace BombermanMultiplayer
 
         #endregion
 
-
+        public Player() { }
 
 
         public Player(byte lifes, int totalFrames, int frameWidth, int frameHeight, int caseligne, int casecolonne, int TileWidth, int TileHeight, int frameTime, byte playerNumero)
@@ -219,48 +219,7 @@ namespace BombermanMultiplayer
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
 
         }
-        public new void Draw(Graphics gr)
-        {
-            if (this.Sprite != null)
-            {
-                if (this.Dead)
-                {
-                    gr.DrawImage(this.Sprite, Source,0 , 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                    gr.DrawString("DEAD", new Font("Arial", 16), new SolidBrush(Color.Red), this.Source.X + Source.Width / 2, this.Source.Y - Source.Height / 2);
-                    return;
-                }
-
-                for (int i = 0; i < 2; i++)
-                {
-                    switch (this.BonusSlot[i])
-                    {
-                        case BonusType.PowerBomb:
-                            gr.DrawImage(Properties.Resources.SuperBomb, this.Source);
-                            break;
-                        case BonusType.SpeedBoost:
-                            gr.DrawLine(new Pen(Color.Yellow, 6), this.Source.X, this.Source.Y + this.Source.Height, this.Source.X + this.Source.Width, this.Source.Y + this.Source.Height);
-                            break;
-                        case BonusType.Desamorce:
-                            break;
-                        case BonusType.Armor:
-                            gr.DrawEllipse(new Pen(Color.Blue, 5), this.Source);
-                            break;
-                        case BonusType.None:
-                            break;
-                        default:
-                            break;
-                    }
-
-                    gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                    gr.DrawRectangle(Pens.Red, this.Source);
-                    gr.DrawString(this.Name, new Font(new Font("Arial", 10), FontStyle.Bold), Brushes.MediumVioletRed, this.Source.X, this.Source.Y - this.Source.Height/2);
-
-
-                }
-
-            }
-        }
-
+        
 
         public void Respawn(Player p, Tile[,] MapGrid, int TileWidth, int TileHeight)
         {
