@@ -216,20 +216,13 @@ namespace BombermanMultiplayer
                     }
                     catch (Exception)
                     {
-
                         //throw;
                     }
-
-
+                    
                     server.Stop();
                     token.ThrowIfCancellationRequested();
-
                 }
-
-
-            }
-            
-
+            }          
         }
 
 

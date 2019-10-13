@@ -44,9 +44,10 @@ namespace BombermanMultiplayer
 
 
         #endregion
-
-
-  
+        
+        public Bomb()
+        {
+        }
 
         public Bomb(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
             : base(caseCol * TileWidth, caseLigne * TileHeight, totalFrames, frameWidth, frameHeight)
@@ -61,9 +62,7 @@ namespace BombermanMultiplayer
 
             this._frameTime = DetonationTime / 8;
         }
-
-
-
+               
         public void TimingExplosion(int elsapedTime)
         {
             if (DetonationTime <= 0)

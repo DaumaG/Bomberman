@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace BombermanMultiplayer
 {
     [Serializable]
-    public class World
+    public class World : GameObject
     {
         public Tile[,] MapGrid;
         [NonSerialized]

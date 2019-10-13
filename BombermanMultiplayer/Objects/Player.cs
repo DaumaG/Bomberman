@@ -22,17 +22,14 @@ namespace BombermanMultiplayer
         private bool _Dead = false;
         private byte _BombNumb = 2;
         private byte _Lifes = 1;
+        private BombFactory bombFactory = new BombFactory();
 
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
 
         public MovementDirection Orientation  = MovementDirection.NONE;
-        
-
-        
-
-
+           
         public int Wait = 500;
 
         public enum MovementDirection
@@ -43,9 +40,7 @@ namespace BombermanMultiplayer
             RIGHT,
             NONE
         }
-
-
-
+               
         #region Accessors
 
 
@@ -96,8 +91,7 @@ namespace BombermanMultiplayer
         #endregion
 
         public Player() { }
-
-
+        
         public Player(byte lifes, int totalFrames, int frameWidth, int frameHeight, int caseligne, int casecolonne, int TileWidth, int TileHeight, int frameTime, byte playerNumero)
             : base(casecolonne * TileWidth, caseligne * TileHeight, totalFrames, frameWidth, frameHeight, frameTime)
         {
@@ -105,8 +99,6 @@ namespace BombermanMultiplayer
             Lifes = lifes;
             Wait = 0;
             PlayerNumero = playerNumero;
-
-
         }
 
         #region Deplacements
@@ -119,8 +111,6 @@ namespace BombermanMultiplayer
             //Hauteur
             this.CasePosition[0] = (this.Source.Y + this.Source.Height / 2) / tileHeight; //Ligne
             this.CasePosition[1] = (this.Source.X + this.Source.Width / 2) / tileWidth; //Colonne
-
-
         }
 
         public void Move()
@@ -204,7 +194,8 @@ namespace BombermanMultiplayer
             {
                 if (!MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied)
                 {
-                    BombsOnTheMap.Add(new Bomb(this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero));
+                    //BombsOnTheMap.Add(new Bomb(this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero));
+                    BombsOnTheMap.Add((Bomb)bombFactory.Create(this.CasePosition[0], this.CasePosition[1], this.PlayerNumero));
                     //Case obtain a reference to the bomb dropped on
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].bomb = BombsOnTheMap[BombsOnTheMap.Count-1];
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied = true;
@@ -215,11 +206,8 @@ namespace BombermanMultiplayer
         
         public void DrawPosition(Graphics g)
         {
-
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
-
-        }
-        
+        }        
 
         public void Respawn(Player p, Tile[,] MapGrid, int TileWidth, int TileHeight)
         {
@@ -328,17 +316,10 @@ namespace BombermanMultiplayer
                         MapGrid[this.CasePosition[0], this.CasePosition[1] + i].Occupied = false;
                     }
                 }
-
-
             }
-
-
-
-
         }
 
 
         #endregion
-
     }
 }

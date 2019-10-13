@@ -24,14 +24,19 @@ namespace BombermanMultiplayer
 
         public List<Bomb> BombsOnTheMap;
         public System.Timers.Timer LogicTimer;
+        private PlayersFactory playersFactory { get; set; }
+        private WorldFactory worldFactory { get; set; }
 
         //ctor when picture box size is determined
         public Game(int hebergeurWidth, int hebergeurHeight)
         {
-            this.world = new World(hebergeurWidth, hebergeurHeight, 48, 48, 1);
+            playersFactory = new PlayersFactory();
+            worldFactory = new WorldFactory();
 
-            player1 = new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
-            player2 = new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
+            this.world = (World)worldFactory.Create(hebergeurWidth, hebergeurHeight, 1);
+
+            player1 = (Player)playersFactory.Create(1, 1, 1);// new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
+            player2 = (Player)playersFactory.Create(this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 2); // new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
 
             this.BombsOnTheMap = new List<Bomb>();
             this.LogicTimer = new System.Timers.Timer(40);
@@ -41,7 +46,7 @@ namespace BombermanMultiplayer
         //ctor when loading a game
         public Game(int hebergeurWidth, int hebergeurHeight, SaveGameData save)
         {
-            this.world = new World(hebergeurWidth, hebergeurHeight, save.MapGrid);
+            this.world = (World)worldFactory.Create(hebergeurWidth, hebergeurHeight, save.MapGrid);
 
             player1 = save.player1;
             player2 = save.player2;
@@ -53,7 +58,7 @@ namespace BombermanMultiplayer
         //default ctor
         public Game()
         {
-            this.world = new World();
+            this.world = (World)worldFactory.Create();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
         }
@@ -79,9 +84,9 @@ namespace BombermanMultiplayer
             //32 Desamorce and Fire 
             //33 Armor and Fire 
 
-            for (int i = 0; i < world.MapGrid.GetLength(0); i++) //Ligne
+            for (int i = 0; i < world.MapGrid.GetLength(0); i++) //Length
             {
-                for (int j = 0; j < world.MapGrid.GetLength(1); j++) //Colonne
+                for (int j = 0; j < world.MapGrid.GetLength(1); j++) //Column
                 {
                     if (world.MapGrid[i, j].BonusHere != null)
                     {
@@ -554,8 +559,8 @@ namespace BombermanMultiplayer
 
         public void SaveGame(string fileName)
         {
-         System.Runtime.Serialization.IFormatter formatter = new BinaryFormatter();
-         System.IO.FileStream filestream = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
+            System.Runtime.Serialization.IFormatter formatter = new BinaryFormatter();
+             System.IO.FileStream filestream = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
             try
             {
                 formatter.Serialize(filestream, new SaveGameData(BombsOnTheMap, world.MapGrid, player1, player2));
