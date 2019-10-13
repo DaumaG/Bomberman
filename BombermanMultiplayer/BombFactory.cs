@@ -15,7 +15,9 @@ namespace BombermanMultiplayer
 
         public override GameObject Create(int atLength, int atColumn, int playerNumber)
         {
-            return new Bomb(atLength, atColumn, 8, 48, 48, 2000, 48, 48, Convert.ToByte(playerNumber));
+            Bomb newBomb = 
+                new Bomb.BombBuilder(atLength, atColumn, 8, 48, 48, 48, 48, Convert.ToByte(playerNumber)).addDetonationTime(2000).addPower(3).build();
+            return newBomb;
         }
     }
 }

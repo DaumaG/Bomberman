@@ -15,9 +15,12 @@ namespace BombermanMultiplayer
     public class Bomb : GameObject, IDisposable
     {
 
-        private int _DetonationTime = 2000;
+        //private int _DetonationTime = 2000;
         public bool Explosing = false;
-        private int bombPower = 3;
+        //private int bombPower = 3;
+
+        private int detonationTime;
+        private int bombPower;
 
         //Who drops the bomb, player 1 = 1, player 2 = 2
         public short Proprietary;
@@ -30,13 +33,13 @@ namespace BombermanMultiplayer
         {
             get
             {
-                return _DetonationTime;
+                return detonationTime;
             }
 
             set
             {
-                if(_DetonationTime > 0)
-                _DetonationTime = value;
+                if(detonationTime > 0)
+                detonationTime = value;
             }
         }
 
@@ -49,7 +52,7 @@ namespace BombermanMultiplayer
         {
         }
 
-        public Bomb(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
+        public Bomb(BombBuilder builder, int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int TileWidth, int TileHeight, short proprietary)
             : base(caseCol * TileWidth, caseLigne * TileHeight, totalFrames, frameWidth, frameHeight)
         {
             CasePosition = new int[2] { caseLigne, caseCol };
@@ -58,9 +61,9 @@ namespace BombermanMultiplayer
             this.LoadSprite(Properties.Resources.Bombe);
             //Define the proprietary player (who drops this bomb)
             this.Proprietary = proprietary;
-            this._DetonationTime = detonationTime;
-
             this._frameTime = DetonationTime / 8;
+            this.bombPower = builder.bombPower;
+            this.detonationTime = builder.detonationTime;
         }
                
         public void TimingExplosion(int elsapedTime)
@@ -291,13 +294,50 @@ namespace BombermanMultiplayer
         }
         #endregion
 
+        // BUILDER 
+        public class BombBuilder
+        {
+            public int detonationTime;
+            public int bombPower;
 
+            private int caseLigne;
+            private int caseCol;
+            private int totalFrames;
+            private int frameWidth;
+            private int frameHeight;
+            private int TileWidth;
+            private int TileHeight;
+            private short proprietary;
 
+            /**
+             * Constructor
+             */
+            public BombBuilder(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int TileWidth, int TileHeight, short proprietary) {
+                this.caseLigne = caseLigne;
+                this.caseCol = caseCol;
+                this.totalFrames = totalFrames;
+                this.frameWidth = frameWidth;
+                this.frameHeight = frameHeight;
+                this.TileWidth = TileWidth;
+                this.TileHeight = TileHeight;
+                this.proprietary = proprietary;
+            }
 
+            public BombBuilder addDetonationTime(int detonationTime)
+            {
+                this.detonationTime = detonationTime;
+                return this;
+            }
+            public BombBuilder addPower(int bombPower)
+            {
+                this.bombPower = bombPower;
+                return this;
+            }
 
-
-
-
-
+            public Bomb build()
+            {
+                return new Bomb(this, caseLigne, caseCol, totalFrames, frameWidth, frameHeight, TileWidth, TileHeight, proprietary);
+            }
+        }
     }
 }
