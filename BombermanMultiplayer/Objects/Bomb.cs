@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Media;
 using System.Diagnostics;
+using BombermanMultiplayer.Builder;
 
 namespace BombermanMultiplayer
 {
@@ -323,18 +324,18 @@ namespace BombermanMultiplayer
                 this.proprietary = proprietary;
             }
 
-            public BombBuilder addDetonationTime(int detonationTime)
+            public BombBuilder AddDetonationTime(BombDetonation detonationTime)
             {
-                this.detonationTime = detonationTime;
+                this.detonationTime = detonationTime.toInt();
                 return this;
             }
-            public BombBuilder addPower(int bombPower)
+            public BombBuilder AddPower(BombPower bombPower)
             {
-                this.bombPower = bombPower;
+                this.bombPower = bombPower.toInt();
                 return this;
             }
 
-            public Bomb build()
+            public Bomb Build()
             {
                 return new Bomb(this, caseLigne, caseCol, totalFrames, frameWidth, frameHeight, TileWidth, TileHeight, proprietary);
             }
