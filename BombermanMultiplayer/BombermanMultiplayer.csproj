@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="AbstractFactory.cs" />
     <Compile Include="BombFactory.cs" />
+    <Compile Include="Builder\BombDetonation.cs" />
+    <Compile Include="Builder\BombPower.cs" />
     <Compile Include="WorldFactory.cs" />
     <Compile Include="PlayersFactory.cs" />
     <Compile Include="Strategy\CheckCollisionMethod.cs" />
