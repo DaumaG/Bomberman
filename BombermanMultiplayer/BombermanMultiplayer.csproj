@@ -33,6 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WMPLib.1.0.0\lib\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WMPLib.1.0.0\lib\Interop.WMPLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,12 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFactory.cs" />
-    <Compile Include="BombFactory.cs" />
+    <Compile Include="Adapter\AudioPlayer.cs" />
+    <Compile Include="Adapter\Mp4Player.cs" />
+    <Compile Include="Adapter\MusicAdapter.cs" />
+    <Compile Include="Adapter\IMusicPlayer.cs" />
+    <Compile Include="Adapter\ISpecificMusicPlayer.cs" />
+    <Compile Include="Adapter\WavPlayer.cs" />
+    <Compile Include="Factories\AbstractFactory.cs" />
+    <Compile Include="Factories\BombFactory.cs" />
     <Compile Include="Builder\BombDetonation.cs" />
     <Compile Include="Builder\BombPower.cs" />
-    <Compile Include="WorldFactory.cs" />
-    <Compile Include="PlayersFactory.cs" />
+    <Compile Include="Factories\WorldFactory.cs" />
+    <Compile Include="Factories\PlayersFactory.cs" />
     <Compile Include="Strategy\CheckCollisionMethod.cs" />
     <Compile Include="Strategy\CheckLeftStrategy.cs" />
     <Compile Include="Strategy\CheckRightStrategy.cs" />
@@ -110,6 +123,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -178,6 +192,11 @@
     <None Include="Sprites\Blood.png" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Adapter\Music\music.mp3" />
+    <Content Include="Adapter\Music\music.mp4" />
+    <Content Include="Adapter\Music\music.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
