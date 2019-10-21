@@ -39,8 +39,7 @@ namespace BombermanMultiplayer
             player1 = (Player)playersFactory.Create(1, 1, 1);// new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
             player2 = (Player)playersFactory.Create(this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 2); // new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
             gameArea.attach(player1);
-            gameArea.attach(player2);
-
+            player1.announce();
             this.BombsOnTheMap = new List<Bomb>();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;

@@ -36,7 +36,7 @@ namespace Observer
 		
         public void playersSpawned(IObserver player)
         {
-            string message = player.getName() + " has Spawned";
+            string message = player.getName() + "s have spawned";
             Debug.WriteLine("+- Observer Action -+");
             this.notifyObservers(message);
         }

@@ -322,6 +322,7 @@ namespace BombermanMultiplayer
         }
 
         private Observer.Subject gameArea;
+        
 
         public Observer.Subject getGameArea()
         {
@@ -334,13 +335,20 @@ namespace BombermanMultiplayer
         }
         public void update(string message)
         {
-            Console.WriteLine(message);
+            Debug.WriteLine(message);
         }
 
         public string getName()
         {
             return Name;
         }
+
+        public void announce()
+        {
+            gameArea.playersSpawned(this);
+        }
+
+    
 
         #endregion
     }
