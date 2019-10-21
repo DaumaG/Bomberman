@@ -13,8 +13,10 @@ using BombermanMultiplayer.Objects;
 
 namespace BombermanMultiplayer
 {
+    using Observer = Observer;
+
     [Serializable]
-    public class Player : GameObject
+    public class Player : GameObject, Observer.IObserver
     {
         byte PlayerNumero;
         public string Name = "Player";
@@ -319,6 +321,26 @@ namespace BombermanMultiplayer
             }
         }
 
+        private Observer.Subject gameArea;
+
+        public Observer.Subject getGameArea()
+        {
+            return gameArea;
+        }
+
+        public void setGameArea(Observer.Subject gameArea)
+        {
+            this.gameArea = gameArea;
+        }
+        public void update(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public string getName()
+        {
+            return Name;
+        }
 
         #endregion
     }
