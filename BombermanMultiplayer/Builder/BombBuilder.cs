@@ -20,10 +20,18 @@ namespace BombermanMultiplayer.Builder
         private int TileHeight;
         private short proprietary;
 
+        private bool bombAlreadyCreated = false;
+
+        private Bomb originalBomb;
+
         /**
          * Constructor
          */
-        public BombBuilder(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int TileWidth, int TileHeight, short proprietary)
+        public BombBuilder()
+        {
+        }
+
+        public BombBuilder AddInfo(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int TileWidth, int TileHeight, short proprietary)
         {
             this.caseLigne = caseLigne;
             this.caseCol = caseCol;
@@ -33,6 +41,7 @@ namespace BombermanMultiplayer.Builder
             this.TileWidth = TileWidth;
             this.TileHeight = TileHeight;
             this.proprietary = proprietary;
+            return this;
         }
 
         public BombBuilder AddDetonationTime(BombDetonation detonationTime)
@@ -48,7 +57,22 @@ namespace BombermanMultiplayer.Builder
 
         public Bomb Build()
         {
-            return new Bomb(this, caseLigne, caseCol, totalFrames, frameWidth, frameHeight, TileWidth, TileHeight, proprietary);
+            if (!bombAlreadyCreated)
+            {
+                Console.WriteLine("Bomb created.");
+                bombAlreadyCreated = true;
+                originalBomb = new Bomb(this, caseLigne, caseCol, totalFrames, frameWidth, frameHeight, TileWidth, TileHeight, proprietary);
+                return originalBomb;
+            }
+            else
+            {
+                Console.WriteLine("Bomb copied.");
+                Bomb copiedBomb = originalBomb.Clone();
+                copiedBomb.SetPosition(caseLigne, caseCol);
+                copiedBomb.SetProprietary(this.proprietary);
+                copiedBomb.SetDetonationTime(this.detonationTime);
+                return copiedBomb;
+            }
         }
     }
 }
