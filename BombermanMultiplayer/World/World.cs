@@ -37,9 +37,9 @@ namespace BombermanMultiplayer
         {
             if (Background != null)
              {
-                Pen blackPen = new Pen(Color.Brown, gr.VisibleClipBounds.Width);
-                gr.DrawRectangle(blackPen, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
-             }
+                gr.DrawImage(Background, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
+
+            }
 
             for (int i = 0; i < MapGrid.GetLength(0); i++) //Ligne
             {
