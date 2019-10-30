@@ -1,4 +1,5 @@
 ﻿using BombermanMultiplayer.Adapter;
+using BombermanMultiplayer.Facade;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +14,11 @@ namespace BombermanMultiplayer
 {
     public partial class MainMenu : Form
     {
+        private MusicMaker _musicMaker { get; set; }
         public MainMenu()
         {
             InitializeComponent();
+            _musicMaker = new MusicMaker();
         }
 
         private void btnLocalGame_Click(object sender, EventArgs e)
@@ -36,23 +39,17 @@ namespace BombermanMultiplayer
 
         private void button_mp4_Click(object sender, EventArgs e)
         {
-            AudioPlayer audioPlayer = new AudioPlayer();
-
-            audioPlayer.Play("mp4", "music.mp4");
+            _musicMaker.PlayMp4();
         }
 
         private void button_wav_Click(object sender, EventArgs e)
         {
-            AudioPlayer audioPlayer = new AudioPlayer();
-
-            audioPlayer.Play("wav", "music.wav");
+            _musicMaker.PlayWav();
         }
 
         private void button_mp3_Click(object sender, EventArgs e)
         {
-            AudioPlayer audioPlayer = new AudioPlayer();
-
-            audioPlayer.Play("mp3", "music.mp3");
+            _musicMaker.PlayMp3();
         }
     }
 }
