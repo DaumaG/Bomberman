@@ -150,6 +150,12 @@ namespace BombermanMultiplayer
         {
             switch (key)
             {
+                case Keys.E:
+                    if (player1.Dead)
+                        break;
+                    player1.Undo();
+                    player1.LoadSprite(Properties.Resources.T_UP);
+                    break;
                 case Keys.Z:
                     if (player1.Dead)
                         break;
@@ -183,6 +189,12 @@ namespace BombermanMultiplayer
                     if (player1.Dead)
                         break;
                     player1.Deactivate(this.world.MapGrid, BombsOnTheMap, player2);
+                    break;
+                case Keys.NumPad0:
+                    if (player2.Dead)
+                        break;
+                    player2.Undo();
+                    player2.LoadSprite(Properties.Resources.T_UP);
                     break;
                 case Keys.Up:
                     if (player2.Dead)
