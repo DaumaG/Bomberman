@@ -26,6 +26,9 @@ namespace BombermanMultiplayer
         private byte _Lifes = 1;
         private BombFactory bombFactory = new BombFactory();
 
+        private List<Command.Command> commands = new List<Command.Command>();
+        private int currentCommandNum = 0;
+
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
@@ -117,46 +120,21 @@ namespace BombermanMultiplayer
 
         public void Move()
         {
-            switch (this.Orientation)
+            Command.MoveCommand moveCommand = new Command.MoveCommand(Orientation, Vitesse, this);
+            moveCommand.Execute();
+            commands.Add(moveCommand);
+            currentCommandNum++;
+        }
+
+        public void Undo()
+        {
+            if (currentCommandNum > 0)
             {
-                case MovementDirection.UP:
-                    DeplHaut();
-                    break;
-                case MovementDirection.DOWN:
-                    DeplBas();
-                    break;
-                case MovementDirection.LEFT:
-                    DeplGauche();
-                    break;
-                case MovementDirection.RIGHT:
-                    DeplDroite();
-                    break;
-                default:
-                    this.frameindex = 0;
-                    break;
+                currentCommandNum--;
+                Command.MoveCommand moveCommand = (Command.MoveCommand)commands[currentCommandNum];
+                moveCommand.Undo();
+                commands.Remove(moveCommand);
             }
-
-        }
-
-
-        public void DeplHaut()
-        {
-                base.Bouger(0, -Vitesse);
-        }
-
-        public void DeplBas()
-        {
-                base.Bouger(0, Vitesse);
-        }
-
-        public void DeplGauche()
-        {
-                base.Bouger(-Vitesse, 0);
-        }
-
-        public void DeplDroite()
-        {
-                base.Bouger(Vitesse, 0);
         }
 
         public void NO()

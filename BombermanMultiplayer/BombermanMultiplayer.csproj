@@ -60,6 +60,8 @@
     <Compile Include="Adapter\ISpecificMusicPlayer.cs" />
     <Compile Include="Adapter\WavPlayer.cs" />
     <Compile Include="Builder\BombBuilder.cs" />
+    <Compile Include="Command\Command.cs" />
+    <Compile Include="Command\MoveCommand.cs" />
     <Compile Include="Facade\Mp3Sound.cs" />
     <Compile Include="Facade\Mp4Sound.cs" />
     <Compile Include="Facade\MusicMaker.cs" />
