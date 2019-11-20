@@ -32,6 +32,7 @@ namespace BombermanMultiplayer
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
 
+        // State pattern
         public MovementDirection Orientation  = MovementDirection.NONE;
            
         public int Wait = 500;
