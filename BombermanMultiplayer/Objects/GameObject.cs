@@ -17,6 +17,8 @@ namespace BombermanMultiplayer
         //Rectangle permettant de 'matérialiser' le sprite
         protected Rectangle _Source;
 
+        protected string Name;
+
         [NonSerialized]
         protected Image Sprite;
 
@@ -26,8 +28,7 @@ namespace BombermanMultiplayer
 
         //Durée d'une frame
         protected float _frameTime = 125;
-
-
+        
         protected int _totalElapsedTime = 0;
 
         //Nombre de frame de l'animation
@@ -119,28 +120,52 @@ namespace BombermanMultiplayer
         }
         public void UnloadSprite()
         {
-
             this.Sprite = null;
-
         }
 
+        #region Template pattern
+        public virtual bool IsImageNeeded()
+        {
+            return false;
+        }
 
-        
-        public void Draw(Graphics gr)
+        public virtual bool IsRectangleNeeded()
+        {
+            return false;
+        }
+        public virtual bool IsStringNeeded()
+        {
+            return false;
+        }
+
+        public virtual void DrawImage(Graphics gr)
+        {
+            gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
+        }
+
+        public void DrawNeededPaintings(Graphics gr)
         {
             if (this.Sprite != null)
             {
-                gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                gr.DrawRectangle(Pens.Red, this.Source);
+                if (IsImageNeeded())
+                {
+                    DrawImage(gr);
+                }
+                if (IsRectangleNeeded())
+                {
+                    gr.DrawRectangle(Pens.Red, this.Source);
+                }
+                if (IsStringNeeded())
+                {
+                    gr.DrawString(this.Name, new Font(new Font("Arial", 10), FontStyle.Bold), Brushes.MediumVioletRed, this.Source.X, this.Source.Y - this.Source.Height / 2);
+                }
             }
         }
 
-
-
-
+        #endregion
+        
         public void UpdateFrame(int elsapedTime)
         {
-
             _totalElapsedTime += elsapedTime;
 
             if (_totalElapsedTime > this.frameSpeed)
@@ -155,21 +180,12 @@ namespace BombermanMultiplayer
 
                 }
             }
-
-
         }
-
-
-
+               
         public void Bouger(int deplX, int deplY) // Ajoute juste le montant du déplacement à la postion de l'objet.
         {
             _Source.X += deplX;
-            _Source.Y += deplY;
-            
-        }
-
-        
-
-
+            _Source.Y += deplY;            
+        }      
     }
 }

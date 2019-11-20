@@ -46,9 +46,6 @@ namespace BombermanMultiplayer
         public Lobby()
         {
             InitializeComponent();
-
-
-
         }
 
         private void btnServer_Click(object sender, EventArgs e)
@@ -103,9 +100,7 @@ namespace BombermanMultiplayer
 
 
             //Start timer to check for incoming packet on the server
-            ConnectionTimer.Start();
-            
-
+            ConnectionTimer.Start(); 
         }
 
 
@@ -132,13 +127,12 @@ namespace BombermanMultiplayer
             {
                 int.TryParse(tbPortConnect.Text, out port);
 
-                //Connexion
+                //Connection
                 client = new Client(tbAddressConnect.Text, port);
 
             }
             catch (Exception ex)
             {
-
                 return;
             }
 
@@ -556,7 +550,7 @@ namespace BombermanMultiplayer
             {
                 try
                 {
-                    bomb.Draw(gr);
+                    bomb.DrawNeededPaintings(gr);
 
                 }
                 catch (Exception)

@@ -48,8 +48,7 @@ namespace BombermanMultiplayer
 
             this.refreshGraphics.Start();
         }
-
-
+        
         public void Draw()
         {
             gr.Clear(pbGame.BackColor);
@@ -68,23 +67,16 @@ namespace BombermanMultiplayer
 
                 foreach (Bomb bomb in game.BombsOnTheMap)
                 {
-
-                bomb.Draw(gr);
-
+                    bomb.DrawNeededPaintings(gr);
                 }
 
             }
             catch (Exception)
             {}
-
-
+            
             DrawInterface();
-
-
-
-
+                                 
             bufferG.Render();
-
         }
 
         public void DrawInterface()

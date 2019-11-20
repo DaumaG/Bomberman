@@ -29,27 +29,38 @@ namespace BombermanMultiplayer
             set
             {
                 Background_ = value;
+                base.Sprite = value;
             }
         }
 
+        #region Template pattern
+        public sealed override bool IsImageNeeded()
+        {
+            return true;
+        }
+
+        public sealed override void DrawImage(Graphics gr)
+        {
+            gr.DrawImage(Background, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
+        }
 
         public void Draw(Graphics gr)
         {
             if (Background != null)
-             {
-                gr.DrawImage(Background, gr.VisibleClipBounds.X, gr.VisibleClipBounds.Y, gr.VisibleClipBounds.Width, gr.VisibleClipBounds.Height);
-
+            {
+                DrawNeededPaintings(gr);
             }
 
-            for (int i = 0; i < MapGrid.GetLength(0); i++) //Ligne
+            for (int i = 0; i < MapGrid.GetLength(0); i++) //Line
             {
-                for (int j = 0; j < MapGrid.GetLength(1); j++) //Colonne
+                for (int j = 0; j < MapGrid.GetLength(1); j++) //Column
                 {
                     MapGrid[i, j].Draw(gr);
                 }
             }
-
         }
+
+        #endregion
 
         public void loadBackground(Image background)
         {
@@ -144,21 +155,10 @@ namespace BombermanMultiplayer
                                 MapGrid[i, j] = new Tile(j * TILE_WIDTH, i * TILE_HEIGHT, totalFrameTile, TILE_WIDTH, TILE_HEIGHT, false, true);
                             else // Le reste des cases est libre 
                                 MapGrid[i, j] = new Tile(j * TILE_WIDTH, i * TILE_HEIGHT, totalFrameTile, TILE_WIDTH, TILE_HEIGHT, true, false);
-
-                        }
-                            
-
-                    }
-                    
-
+                        }   
+                    }   
                 }
             }
-        }
-
-
-        
-
-
-
+        }     
     }
 }

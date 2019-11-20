@@ -26,13 +26,7 @@ namespace BombermanMultiplayer
         public Bomb bomb = null;
 
         public int FireTime = 500; 
-
-        #region Accessors
-
-
-        #endregion
-
-
+               
         public Tile(int x_, int y_, int totalFrame_, int frameWidth_, int frameHeigt_,  bool walkable, bool destroyable)
             : base(x_, y_, totalFrame_, frameWidth_, frameHeigt_)
         {
@@ -74,23 +68,29 @@ namespace BombermanMultiplayer
             }
         }
 
-        public new void Draw(Graphics gr)
+        #region Template pattern
+
+        public override bool IsImageNeeded()
+        {
+            return true;
+        }
+        public override bool IsRectangleNeeded()
+        {
+            return true;
+        }
+
+        public void Draw(Graphics gr)
         {
             if (this.Sprite != null)
             {
-                gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                gr.DrawRectangle(Pens.Red, this.Source);
-               
+                DrawNeededPaintings(gr);
             }
             if (BonusHere != null)
             {
-                this.BonusHere.Draw(gr);
-
+                this.BonusHere.DrawNeededPaintings(gr);
             }
         }
 
-    }
-
-    
-
+        #endregion
+    }   
 }
