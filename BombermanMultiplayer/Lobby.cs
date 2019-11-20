@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BombermanMultiplayer.Iterator;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -87,17 +88,22 @@ namespace BombermanMultiplayer
             }
 
             List<string> PlayersInfos = RX_Packet.GetPayload<List<string>>();
-
             
-            lbConnected.Items.Clear();
-
+            ConcreteContainer PlayersInfosContainer = new ConcreteContainer();
             for (int i = 0; i < PlayersInfos.Count; i++)
             {
-                lbConnected.Items.Add(PlayersInfos[i]);
-
+                PlayersInfosContainer.Add(PlayersInfos[i]);
             }
-            
 
+            lbConnected.Items.Clear();
+
+            ConcreteIterator playerInfoContainerIterator = (ConcreteIterator)PlayersInfosContainer.CreateIterator();
+            string item = (string)playerInfoContainerIterator.First();
+            while (item != null)
+            {
+                lbConnected.Items.Add(item);
+                item = (string)playerInfoContainerIterator.Next();
+            }          
 
             //Start timer to check for incoming packet on the server
             ConnectionTimer.Start(); 
@@ -147,14 +153,22 @@ namespace BombermanMultiplayer
 
             List<string> PlayersInfos = RX_Packet.GetPayload<List<string>>();
 
+            ConcreteContainer PlayersInfosContainer = new ConcreteContainer();
+            for (int i = 0; i < PlayersInfos.Count; i++)
+            {
+                PlayersInfosContainer.Add(PlayersInfos[i]);
+            }
 
             lbConnected.Items.Clear();
 
-            for (int i = 0; i < PlayersInfos.Count; i++)
+            ConcreteIterator playerInfoContainerIterator = (ConcreteIterator)PlayersInfosContainer.CreateIterator();
+            string item = (string)playerInfoContainerIterator.First();
+            while (item != null)
             {
-                lbConnected.Items.Add(PlayersInfos[i]);
-
+                lbConnected.Items.Add(item);
+                item = (string)playerInfoContainerIterator.Next();
             }
+
             PanelConnections.Visible = false;
 
             Station = Sender.Player2;
@@ -181,13 +195,22 @@ namespace BombermanMultiplayer
                         if (RX_Packet.GetPacketType() == PacketType.Connection)
                         {
                             List<string> PlayersInfos = RX_Packet.GetPayload<List<string>>();
-                            lbConnected.Items.Clear();
+
+                            ConcreteContainer PlayersInfosContainer = new ConcreteContainer();
                             for (int i = 0; i < PlayersInfos.Count; i++)
                             {
-                                lbConnected.Items.Add(PlayersInfos[i]);
-
+                                PlayersInfosContainer.Add(PlayersInfos[i]);
                             }
-                            
+                            lbConnected.Items.Clear();
+
+                            ConcreteIterator playerInfoContainerIterator = (ConcreteIterator)PlayersInfosContainer.CreateIterator();
+                            string item = (string)playerInfoContainerIterator.First();
+                            while (item != null)
+                            {
+                                lbConnected.Items.Add(item);
+                                item = (string)playerInfoContainerIterator.Next();
+                            }
+
                         }
                         if (RX_Packet.GetPacketType() == PacketType.MapTransfer)
                         {
@@ -484,8 +507,6 @@ namespace BombermanMultiplayer
 
         public void Draw()
         {
-            Console.WriteLine(game.player1.Dead);
-            Console.WriteLine(game.player2.Dead);
             if (!game.player1.Dead)
             {
                 switch (game.player1.Orientation)

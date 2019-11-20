@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BombermanMultiplayer.Iterator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -36,7 +37,7 @@ namespace BombermanMultiplayer
         }
 
         //List the connections with which the server is connected
-        public List<Connection> connections = new List<Connection>();
+        ConcreteContainer connections = new ConcreteContainer();
         //Socket of the server
         TcpListener server;
         //Determine if the game is running or not
@@ -87,9 +88,13 @@ namespace BombermanMultiplayer
                 if (token.IsCancellationRequested)
                 {
                     //Disconnect all clients
-                    foreach (var item in connections)
+
+                    ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+                    Connection item = (Connection)connectionsIterator.First();
+                    while (item != null)
                     {
                         item.sock.Close();
+                        item = (Connection)connectionsIterator.Next();
                     }
 
                     server.Stop();
@@ -207,12 +212,14 @@ namespace BombermanMultiplayer
                         this.server.Server.Close();
 
                         //Disconnect all clients
-                        foreach (var item in connections)
+                        ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+                        Connection item = (Connection)connectionsIterator.First();
+                        while (item != null)
                         {
                             item.sock.Client.Shutdown(SocketShutdown.Both);
                             item.sock.Client.Close();
+                            item = (Connection)connectionsIterator.Next();
                         }
-
                     }
                     catch (Exception)
                     {
@@ -289,7 +296,6 @@ namespace BombermanMultiplayer
                 conn.stream = conn.sock.GetStream();
                 conn.formatter = new BinaryFormatter();
                 connections.Add(conn);
-
                 //Send Player list to all players
                 SendPlayersList();
 
@@ -306,12 +312,16 @@ namespace BombermanMultiplayer
 
             StringBuilder s = new StringBuilder();
 
-            for (int i = 0; i < connections.Count; i++)
+            ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+            Connection item = (Connection)connectionsIterator.First();
+            int i = 0;
+            while (item != null)
             {
-                infosPlayers.Add(s.Append("Player " + i + " : " + connections[i].sock.Client.RemoteEndPoint.ToString()).ToString());
+                infosPlayers.Add(s.Append("Player " + i + " : " + item.sock.Client.RemoteEndPoint.ToString()).ToString());
                 s.Clear();
+                item = (Connection)connectionsIterator.Next();
+                i++;
             }
-
 
             Packet PlayersList = new Packet(Station, PacketType.Connection, infosPlayers);
             this.SendData(PlayersList);
@@ -326,10 +336,14 @@ namespace BombermanMultiplayer
             try
             {
                 // send to all
-                foreach (Connection c in connections)
+
+                ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+                Connection item = (Connection)connectionsIterator.First();
+                while (item != null)
                 {
-                    c.formatter.Serialize(c.stream, obj);
-                    c.stream.Flush();
+                    item.formatter.Serialize(item.stream, obj);
+                    item.stream.Flush();
+                    item = (Connection)connectionsIterator.Next();
                 }
             }
             catch(Exception) { }
@@ -341,12 +355,16 @@ namespace BombermanMultiplayer
         /// <param name="obj">Class which encapsulates the datas</param>
         public void RecvData(ref Packet obj)
         {
-            foreach (Connection c in connections)
+
+            ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+            Connection item = (Connection)connectionsIterator.First();
+            while (item != null)
             {
-                while (c.stream.DataAvailable)
+                while (item.stream.DataAvailable)
                 {
-                    obj = (Packet)c.formatter.Deserialize(c.stream);
+                    obj = (Packet)item.formatter.Deserialize(item.stream);
                 }
+                item = (Connection)connectionsIterator.Next();
             }
         }
 
