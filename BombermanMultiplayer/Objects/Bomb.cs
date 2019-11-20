@@ -15,10 +15,7 @@ namespace BombermanMultiplayer
     [Serializable]
     public class Bomb : GameObject, IDisposable
     {
-
-        //private int _DetonationTime = 2000;
         public bool Explosing = false;
-        //private int bombPower = 3;
 
         private int detonationTime;
         private int bombPower;
@@ -26,9 +23,8 @@ namespace BombermanMultiplayer
         //Who drops the bomb, player 1 = 1, player 2 = 2
         public short Proprietary;
 
-        #region Accessors
-
-      
+        public int TileHeight;
+        public int TileWidth;
 
         public int DetonationTime
         {
@@ -43,11 +39,6 @@ namespace BombermanMultiplayer
                 detonationTime = value;
             }
         }
-
-     
-
-
-        #endregion
         
         public Bomb()
         {
@@ -57,7 +48,8 @@ namespace BombermanMultiplayer
             : base(caseCol * TileWidth, caseLigne * TileHeight, totalFrames, frameWidth, frameHeight)
         {
             CasePosition = new int[2] { caseLigne, caseCol };
-
+            this.TileHeight = TileHeight;
+            this.TileWidth = TileWidth;
             //Charge the sprite
             this.LoadSprite(Properties.Resources.Bombe);
             //Define the proprietary player (who drops this bomb)
@@ -66,14 +58,37 @@ namespace BombermanMultiplayer
             this.bombPower = builder.bombPower;
             this.detonationTime = builder.detonationTime;
         }
-               
+
+        public Bomb Clone()
+        {
+            this.Explosing = false;
+            return (Bomb)this.MemberwiseClone();
+        }
+
+        public void SetPosition(int caseLigne, int caseCol)
+        {
+            CasePosition = new int[2] { caseLigne, caseCol };
+            this.ChangeLocation(caseCol * this.TileWidth, caseLigne * this.TileHeight);
+            this.LoadSprite(Properties.Resources.Bombe);
+        }
+
+        public void SetProprietary(short proprietary)
+        {
+            this.Proprietary = proprietary;
+        }
+
+        public void SetDetonationTime (int detonationTime)
+        {
+            this.detonationTime = detonationTime;
+        }
+
         public void TimingExplosion(int elsapedTime)
         {
-            if (DetonationTime <= 0)
+            if (detonationTime <= 0)
             {
                 this.Explosing = true;
             }
-            DetonationTime -= elsapedTime;
+            detonationTime -= elsapedTime;
         }
 
         public void Explosion(Tile[,] MapGrid, Player player1, Player player2)
@@ -254,9 +269,6 @@ namespace BombermanMultiplayer
 
         }
 
-        
-
-
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
@@ -266,79 +278,18 @@ namespace BombermanMultiplayer
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
-
                     this.Sprite = null;
 
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
                 disposedValue = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~Bomb() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-             GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
-
-        // BUILDER 
-        public class BombBuilder
-        {
-            public int detonationTime;
-            public int bombPower;
-
-            private int caseLigne;
-            private int caseCol;
-            private int totalFrames;
-            private int frameWidth;
-            private int frameHeight;
-            private int TileWidth;
-            private int TileHeight;
-            private short proprietary;
-
-            /**
-             * Constructor
-             */
-            public BombBuilder(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int TileWidth, int TileHeight, short proprietary) {
-                this.caseLigne = caseLigne;
-                this.caseCol = caseCol;
-                this.totalFrames = totalFrames;
-                this.frameWidth = frameWidth;
-                this.frameHeight = frameHeight;
-                this.TileWidth = TileWidth;
-                this.TileHeight = TileHeight;
-                this.proprietary = proprietary;
-            }
-
-            public BombBuilder AddDetonationTime(BombDetonation detonationTime)
-            {
-                this.detonationTime = detonationTime.toInt();
-                return this;
-            }
-            public BombBuilder AddPower(BombPower bombPower)
-            {
-                this.bombPower = bombPower.toInt();
-                return this;
-            }
-
-            public Bomb Build()
-            {
-                return new Bomb(this, caseLigne, caseCol, totalFrames, frameWidth, frameHeight, TileWidth, TileHeight, proprietary);
-            }
-        }
     }
 }

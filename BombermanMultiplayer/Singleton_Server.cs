@@ -258,6 +258,8 @@ namespace BombermanMultiplayer
             gamestate.NamePlayer1 = game.player1.Name;
             gamestate.NamePlayer2 = game.player2.Name;
 
+            gamestate.deadPlayer1 = game.player1.Dead;
+            gamestate.deadPlayer2 = game.player2.Dead;
 
             gamestate.bombsList = game.BombsOnTheMap;
 

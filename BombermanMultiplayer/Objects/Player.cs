@@ -13,8 +13,10 @@ using BombermanMultiplayer.Objects;
 
 namespace BombermanMultiplayer
 {
+    using Observer = Observer;
+
     [Serializable]
-    public class Player : GameObject
+    public class Player : GameObject, Observer.IObserver
     {
         byte PlayerNumero;
         public string Name = "Player";
@@ -23,6 +25,9 @@ namespace BombermanMultiplayer
         private byte _BombNumb = 2;
         private byte _Lifes = 1;
         private BombFactory bombFactory = new BombFactory();
+
+        private List<Command.Command> commands = new List<Command.Command>();
+        private int currentCommandNum = 0;
 
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
@@ -115,46 +120,21 @@ namespace BombermanMultiplayer
 
         public void Move()
         {
-            switch (this.Orientation)
+            Command.MoveCommand moveCommand = new Command.MoveCommand(Orientation, Vitesse, this);
+            moveCommand.Execute();
+            commands.Add(moveCommand);
+            currentCommandNum++;
+        }
+
+        public void Undo()
+        {
+            if (currentCommandNum > 0)
             {
-                case MovementDirection.UP:
-                    DeplHaut();
-                    break;
-                case MovementDirection.DOWN:
-                    DeplBas();
-                    break;
-                case MovementDirection.LEFT:
-                    DeplGauche();
-                    break;
-                case MovementDirection.RIGHT:
-                    DeplDroite();
-                    break;
-                default:
-                    this.frameindex = 0;
-                    break;
+                currentCommandNum--;
+                Command.MoveCommand moveCommand = (Command.MoveCommand)commands[currentCommandNum];
+                moveCommand.Undo();
+                commands.Remove(moveCommand);
             }
-
-        }
-
-
-        public void DeplHaut()
-        {
-                base.Bouger(0, -Vitesse);
-        }
-
-        public void DeplBas()
-        {
-                base.Bouger(0, Vitesse);
-        }
-
-        public void DeplGauche()
-        {
-                base.Bouger(-Vitesse, 0);
-        }
-
-        public void DeplDroite()
-        {
-                base.Bouger(Vitesse, 0);
         }
 
         public void NO()
@@ -207,7 +187,50 @@ namespace BombermanMultiplayer
         public void DrawPosition(Graphics g)
         {
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
-        }        
+        }
+
+        public new void Draw(Graphics gr)
+        {
+            if (this.Sprite != null)
+            {
+                if (this.Dead)
+                {
+                    gr.DrawImage(this.Sprite, Source, 0, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
+                    gr.DrawString("DEAD", new Font("Arial", 16), new SolidBrush(Color.Red), this.Source.X + Source.Width / 2, this.Source.Y - Source.Height / 2);
+                    return;
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    switch (this.BonusSlot[i])
+                    {
+                        case BonusType.PowerBomb:
+                            gr.DrawImage(Properties.Resources.SuperBomb, this.Source);
+                            break;
+                        case BonusType.SpeedBoost:
+                            gr.DrawLine(new Pen(Color.Yellow, 6), this.Source.X, this.Source.Y + this.Source.Height, this.Source.X + this.Source.Width, this.Source.Y + this.Source.Height);
+                            break;
+                        case BonusType.Desamorce:
+                            break;
+                        case BonusType.Armor:
+                            gr.DrawEllipse(new Pen(Color.Blue, 5), this.Source);
+                            break;
+                        case BonusType.None:
+                            break;
+                        default:
+                            break;
+                    }
+
+                    gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
+                    gr.DrawRectangle(Pens.Red, this.Source);
+                    gr.DrawString(this.Name, new Font(new Font("Arial", 10), FontStyle.Bold), Brushes.MediumVioletRed, this.Source.X, this.Source.Y - this.Source.Height / 2);
+
+
+                }
+
+            }
+        }
+
 
         public void Respawn(Player p, Tile[,] MapGrid, int TileWidth, int TileHeight)
         {
@@ -319,6 +342,34 @@ namespace BombermanMultiplayer
             }
         }
 
+        private Observer.Subject gameArea;
+        
+
+        public Observer.Subject getGameArea()
+        {
+            return gameArea;
+        }
+
+        public void setGameArea(Observer.Subject gameArea)
+        {
+            this.gameArea = gameArea;
+        }
+        public void update(string message)
+        {
+            Debug.WriteLine(message);
+        }
+
+        public string getName()
+        {
+            return Name;
+        }
+
+        public void announce()
+        {
+            gameArea.playersSpawned(this);
+        }
+
+    
 
         #endregion
     }

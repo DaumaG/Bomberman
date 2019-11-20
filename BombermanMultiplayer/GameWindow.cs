@@ -39,7 +39,6 @@ namespace BombermanMultiplayer
             game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
             game.player1.LoadSprite(Properties.Resources.AT_DOWN);
             game.player2.LoadSprite(Properties.Resources.T_UP);
-
             bufferG = BufferedGraphicsManager.Current.Allocate(pbGame.CreateGraphics(), pbGame.DisplayRectangle);
             gr = bufferG.Graphics;
 

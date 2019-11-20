@@ -259,6 +259,8 @@ namespace BombermanMultiplayer
                             game.player1.Name = gamestate.NamePlayer1;
                             game.player2.Name = gamestate.NamePlayer2;
 
+                            game.player1.Dead = gamestate.deadPlayer1;
+                            game.player2.Dead = gamestate.deadPlayer2;
 
                             game.BombsOnTheMap = gamestate.bombsList;
 
@@ -472,7 +474,7 @@ namespace BombermanMultiplayer
                 }
             }
 
-            //game.world.loadBackground(Properties.Resources.World);
+            game.world.loadBackground(Properties.Resources.World);
             game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
             game.player1.LoadSprite(Properties.Resources.AT_DOWN);
             game.player2.LoadSprite(Properties.Resources.T_UP);
@@ -488,7 +490,8 @@ namespace BombermanMultiplayer
 
         public void Draw()
         {
-
+            Console.WriteLine(game.player1.Dead);
+            Console.WriteLine(game.player2.Dead);
             if (!game.player1.Dead)
             {
                 switch (game.player1.Orientation)

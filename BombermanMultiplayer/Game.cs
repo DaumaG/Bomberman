@@ -15,6 +15,7 @@ namespace BombermanMultiplayer
     /// </summary>
     public class Game
     {
+        Observer.Subject gameArea = new Observer.GameArea();
         public bool Paused = false;
         public bool Over = false;
         public byte Winner = 0;
@@ -37,7 +38,8 @@ namespace BombermanMultiplayer
 
             player1 = (Player)playersFactory.Create(1, 1, 1);// new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
             player2 = (Player)playersFactory.Create(this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 2); // new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
-
+            gameArea.attach(player1);
+            player1.announce();
             this.BombsOnTheMap = new List<Bomb>();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
@@ -148,6 +150,12 @@ namespace BombermanMultiplayer
         {
             switch (key)
             {
+                case Keys.E:
+                    if (player1.Dead)
+                        break;
+                    player1.Undo();
+                    player1.LoadSprite(Properties.Resources.T_UP);
+                    break;
                 case Keys.Z:
                     if (player1.Dead)
                         break;
@@ -181,6 +189,12 @@ namespace BombermanMultiplayer
                     if (player1.Dead)
                         break;
                     player1.Deactivate(this.world.MapGrid, BombsOnTheMap, player2);
+                    break;
+                case Keys.NumPad0:
+                    if (player2.Dead)
+                        break;
+                    player2.Undo();
+                    player2.LoadSprite(Properties.Resources.T_UP);
                     break;
                 case Keys.Up:
                     if (player2.Dead)
