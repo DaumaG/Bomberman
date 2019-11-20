@@ -73,6 +73,7 @@
     <Compile Include="Builder\BombPower.cs" />
     <Compile Include="Factories\WorldFactory.cs" />
     <Compile Include="Factories\PlayersFactory.cs" />
+    <Compile Include="Flyweight\FlyweightFactory.cs" />
     <Compile Include="Observer\GameArea.cs" />
     <Compile Include="Observer\IObserver.cs" />
     <Compile Include="Observer\Subject.cs" />

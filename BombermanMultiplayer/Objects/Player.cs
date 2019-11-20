@@ -28,9 +28,6 @@ namespace BombermanMultiplayer
         private byte _Lifes = 1;
         private BombFactory bombFactory = new BombFactory();
 
-        private List<Command.Command> commands = new List<Command.Command>();
-        private int currentCommandNum = 0;
-
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
@@ -120,6 +117,9 @@ namespace BombermanMultiplayer
             this.CasePosition[0] = (this.Source.Y + this.Source.Height / 2) / tileHeight; //Ligne
             this.CasePosition[1] = (this.Source.X + this.Source.Width / 2) / tileWidth; //Colonne
         }
+
+        private List<Command.Command> commands = new List<Command.Command>();
+        private int currentCommandNum = 0;
 
         public void Move()
         {

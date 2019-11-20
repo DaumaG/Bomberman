@@ -262,6 +262,9 @@ namespace BombermanMultiplayer
 
             switch (key)
             {
+                case Keys.NumPad0:
+                    sender.Undo();
+                    break;
                 case Keys.Up:
                     sender.Orientation = Player.MovementDirection.UP;
                     break;
@@ -424,7 +427,7 @@ namespace BombermanMultiplayer
                 {
                     BombsOnTheMap.RemoveAt(ToRemove[i]);
                 }
-                catch (Exception){}
+                catch (Exception) { }
             }
         }
 
@@ -524,43 +527,17 @@ namespace BombermanMultiplayer
         }
         //Collision management
 
-        
+
         public bool CheckCollisionPlayer(Player movingPlayer, Player player2, Tile[,] map, Player.MovementDirection direction)
         {
             int lig = movingPlayer.CasePosition[0];
             int col = movingPlayer.CasePosition[1];
 
-            //Check for environnement collision (map) (Strategy design pattern)
-            switch (direction)
-            {
-                case Player.MovementDirection.UP:
-                    {
-                        if (!new CheckCollision(new CheckUpStrategy()).CheckDirection(movingPlayer, player2, map))
-                            return false;
-                    }
-                    break;
-                case Player.MovementDirection.DOWN:
-                    {
-                        if (!new CheckCollision(new CheckDownStrategy()).CheckDirection(movingPlayer, player2, map))
-                            return false;
-                    }
-                    break;
-                case Player.MovementDirection.LEFT:
-                    {
-                        if (!new CheckCollision(new CheckLeftStrategy()).CheckDirection(movingPlayer, player2, map))
-                            return false;
-                    }
-                    break;
-                case Player.MovementDirection.RIGHT:
-                    {
-                        if (!new CheckCollision(new CheckRightStrategy()).CheckDirection(movingPlayer, player2, map))
-                            return false;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            
+            FlyweightFactory flyweight = new FlyweightFactory();
+
+            if (!new CheckCollision(flyweight.GetStrategy(direction)).CheckDirection(movingPlayer, player2, map))
+                return false;
+
             return true;
         }
         private void LogicTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -574,7 +551,7 @@ namespace BombermanMultiplayer
         public void SaveGame(string fileName)
         {
             System.Runtime.Serialization.IFormatter formatter = new BinaryFormatter();
-             System.IO.FileStream filestream = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
+            System.IO.FileStream filestream = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
             try
             {
                 formatter.Serialize(filestream, new SaveGameData(BombsOnTheMap, world.MapGrid, player1, player2));
@@ -617,7 +594,7 @@ namespace BombermanMultiplayer
                 this.Winner = 0;
             }
         }
-        
+
         public void Pause()
         {
             //If the game is already over, no need for pause
