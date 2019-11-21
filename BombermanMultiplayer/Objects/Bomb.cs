@@ -65,6 +65,22 @@ namespace BombermanMultiplayer
             return (Bomb)this.MemberwiseClone();
         }
 
+        #region Template pattern
+        public sealed override bool IsImageNeeded()
+        {
+            return true;
+        }
+
+        public sealed override bool IsRectangleNeeded()
+        {
+            return true;
+        }
+        public sealed override bool IsStringNeeded()
+        {
+            return false;
+        }
+        #endregion
+
         public void SetPosition(int caseLigne, int caseCol)
         {
             CasePosition = new int[2] { caseLigne, caseCol };

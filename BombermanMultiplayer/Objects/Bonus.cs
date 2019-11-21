@@ -25,6 +25,19 @@ namespace BombermanMultiplayer.Objects
             this.CasePosition[1] = this.Source.X / TileWidth; //Colonne
         }
 
+        #region Template pattern
+
+        public sealed override bool IsImageNeeded()
+        {
+            return true;
+        }
+
+        public sealed override bool IsRectangleNeeded()
+        {
+            return true;
+        }
+
+        #endregion
     }
 
     public enum BonusType
@@ -34,6 +47,5 @@ namespace BombermanMultiplayer.Objects
         SpeedBoost,
         Desamorce,
         Armor
-
     }
 }

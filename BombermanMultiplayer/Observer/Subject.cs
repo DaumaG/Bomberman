@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BombermanMultiplayer.Iterator;
 using BombermanMultiplayer.Objects;
 
 namespace Observer
@@ -14,8 +15,7 @@ namespace Observer
 
     public abstract class Subject
 	{
-		private List<IObserver> observers = new List<IObserver>();
-
+        private ConcreteContainer observers = new ConcreteContainer();
 
         public void attach(IObserver player)
         {
@@ -25,13 +25,18 @@ namespace Observer
         	
 		public void detach( IObserver player )
 		{
-			this.observers.Remove(player);
+            observers.Remove(player);
 		}
 		
 		public void notifyObservers( string message )
 		{
-            foreach (IObserver observers in this.observers) {
-                observers.update(message); }
+            ConcreteIterator observersIterator = (ConcreteIterator)observers.CreateIterator();
+            IObserver item = (IObserver)observersIterator.First();
+            while (item != null)
+            {
+                item.update(message);
+                item = (IObserver)observersIterator.Next();
+            }
 		}
 		
         public void playersSpawned(IObserver player)

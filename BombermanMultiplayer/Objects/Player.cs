@@ -19,20 +19,20 @@ namespace BombermanMultiplayer
     public class Player : GameObject, Observer.IObserver
     {
         byte PlayerNumero;
-        public string Name = "Player";
+
+        private string _name = "Player";
+        public new string Name { get { return this._name; } set { this._name = value; base.Name = value; } }
         private byte _Vitesse = 5;
         private bool _Dead = false;
         private byte _BombNumb = 2;
         private byte _Lifes = 1;
         private BombFactory bombFactory = new BombFactory();
 
-        private List<Command.Command> commands = new List<Command.Command>();
-        private int currentCommandNum = 0;
-
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
 
+        // State pattern
         public MovementDirection Orientation  = MovementDirection.NONE;
            
         public int Wait = 500;
@@ -104,6 +104,7 @@ namespace BombermanMultiplayer
             Lifes = lifes;
             Wait = 0;
             PlayerNumero = playerNumero;
+            base.Name = "Player";
         }
 
         #region Deplacements
@@ -117,6 +118,9 @@ namespace BombermanMultiplayer
             this.CasePosition[0] = (this.Source.Y + this.Source.Height / 2) / tileHeight; //Ligne
             this.CasePosition[1] = (this.Source.X + this.Source.Width / 2) / tileWidth; //Colonne
         }
+
+        private List<Command.Command> commands = new List<Command.Command>();
+        private int currentCommandNum = 0;
 
         public void Move()
         {
@@ -189,7 +193,23 @@ namespace BombermanMultiplayer
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
         }
 
-        public new void Draw(Graphics gr)
+        #region Template pattern
+
+        public sealed override bool IsImageNeeded()
+        {
+            return true;
+        }
+
+        public sealed override bool IsRectangleNeeded()
+        {
+            return true;
+        }
+        public sealed override bool IsStringNeeded()
+        {
+            return true;
+        }
+
+        public void Draw(Graphics gr)
         {
             if (this.Sprite != null)
             {
@@ -221,16 +241,15 @@ namespace BombermanMultiplayer
                             break;
                     }
 
-                    gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
-                    gr.DrawRectangle(Pens.Red, this.Source);
-                    gr.DrawString(this.Name, new Font(new Font("Arial", 10), FontStyle.Bold), Brushes.MediumVioletRed, this.Source.X, this.Source.Y - this.Source.Height / 2);
-
-
+                    DrawNeededPaintings(gr);
+                    //gr.DrawImage(this.Sprite, Source, frameindex * Source.Width, 0, Source.Width, Source.Height, GraphicsUnit.Pixel);
+                    //gr.DrawRectangle(Pens.Red, this.Source);
+                    //gr.DrawString(this.Name, new Font(new Font("Arial", 10), FontStyle.Bold), Brushes.MediumVioletRed, this.Source.X, this.Source.Y - this.Source.Height / 2);
                 }
-
             }
         }
 
+        #endregion
 
         public void Respawn(Player p, Tile[,] MapGrid, int TileWidth, int TileHeight)
         {
