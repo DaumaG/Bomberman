@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 namespace BombermanMultiplayer
 {
+    using Decorator = Decorator;
     /// <summary>
     /// Game components 
     /// </summary>
@@ -44,6 +45,9 @@ namespace BombermanMultiplayer
             player2 = (Player)playersFactory.Create(this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 2); // new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
             gameArea.attach(player1);
             player1.announce();
+            Decorator.PlayerComponent uc = new Decorator.Shied(player2);
+            Debug.WriteLine(uc.PowerBomb());
+            Debug.WriteLine(uc.BonusTypeTimer());
             this.BombsOnTheMap = new List<Bomb>();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
