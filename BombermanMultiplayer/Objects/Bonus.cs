@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BombermanMultiplayer.Mediator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,22 @@ namespace BombermanMultiplayer.Objects
         public BonusType Type = BonusType.None;
 
 
-        public Bonus(int x, int y, int frameNumber, int frameWidth, int frameHeight, BonusType type ) 
+        public Bonus(int x, int y, int frameNumber, int frameWidth, int frameHeight, BonusType type) 
             : base(x, y, frameNumber, frameWidth, frameHeight)
         {
             this.Type = type;
 
+        }
+
+        public void Send(string message, GameObject receiver)
+        {
+            Console.WriteLine("Bonus sends message: " + message);
+            mediator.SendMessage(this, receiver, message);
+        }
+
+        public void Notify(string message)
+        {
+            Console.WriteLine("Bonus gets message: " + message);
         }
 
         public void CheckCasePosition(int TileWidth, int TileHeight)

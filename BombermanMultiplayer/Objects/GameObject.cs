@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Media;
 using System.Diagnostics;
+using BombermanMultiplayer.Mediator;
 
 namespace BombermanMultiplayer
 {
@@ -30,6 +31,8 @@ namespace BombermanMultiplayer
         protected int _totalFrames;
 
         protected int[] _CasePosition;
+
+        public IMediator mediator;
 
         #region Accessors
         public int[] CasePosition

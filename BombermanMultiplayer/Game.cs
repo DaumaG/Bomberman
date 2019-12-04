@@ -9,6 +9,8 @@ using System.Timers;
 using System.Windows.Forms;
 using System.Diagnostics;
 using BombermanMultiplayer.ChainOfResponsibility;
+using BombermanMultiplayer.Mediator;
+using BombermanMultiplayer.Objects;
 
 namespace BombermanMultiplayer
 {
@@ -34,7 +36,7 @@ namespace BombermanMultiplayer
         private WorldFactory worldFactory { get; set; }
 
         private FlyweightFactory flyweight = new FlyweightFactory();
-
+        
         //ctor when picture box size is determined
         public Game(int hebergeurWidth, int hebergeurHeight)
         {
@@ -58,6 +60,8 @@ namespace BombermanMultiplayer
             this.BombsOnTheMap = new List<Bomb>();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
+
+            player1.mediator = Globals.mediator;
         }
 
         //ctor when loading a game
@@ -198,7 +202,7 @@ namespace BombermanMultiplayer
                 case Keys.Space:
                     if (player1.Dead)
                         break;
-                    player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2);
+                    player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2, Globals.mediator);
                     loggerChain.logMessage(AbstractLogger.BOMB, "Player1 bomb created.");
                     Console.WriteLine("-----------------------------");
                     break;
@@ -245,7 +249,7 @@ namespace BombermanMultiplayer
                 case Keys.ControlKey:
                     if (player2.Dead)
                         break;
-                    player2.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player1);
+                    player2.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player1, Globals.mediator);
                     loggerChain.logMessage(AbstractLogger.BOMB, "Player2 bomb created.");
                     Console.WriteLine("-----------------------------");
                     break;
@@ -369,7 +373,7 @@ namespace BombermanMultiplayer
                     sender.Orientation = Player.MovementDirection.RIGHT;
                     break;
                 case Keys.Space:
-                    sender.DropBomb(this.world.MapGrid, this.BombsOnTheMap, otherPlayer);
+                    sender.DropBomb(this.world.MapGrid, this.BombsOnTheMap, otherPlayer, Globals.mediator);
                     break;
                 case Keys.NumPad1:
                     sender.UndoBomb(this.world.MapGrid, this.BombsOnTheMap);
@@ -583,6 +587,14 @@ namespace BombermanMultiplayer
                         default:
                             break;
                     }
+
+                    Bonus bonus = this.world.MapGrid[player.CasePosition[0], player.CasePosition[1]].BonusHere;
+                    bonus.mediator = Globals.mediator;
+                    player.mediator = Globals.mediator;
+                    Globals.mediator.BonusMessages = bonus;
+                    Globals.mediator.PlayerMessages = player;
+                    bonus.Send("Bonus picked up.", player);
+                    player.Send("Player received message", bonus);
                     this.world.MapGrid[player.CasePosition[0], player.CasePosition[1]].BonusHere = null;
                 }
             }

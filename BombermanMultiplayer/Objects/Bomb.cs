@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Media;
 using System.Diagnostics;
 using BombermanMultiplayer.Builder;
+using BombermanMultiplayer.Mediator;
 
 namespace BombermanMultiplayer
 {
@@ -57,6 +58,17 @@ namespace BombermanMultiplayer
             this._frameTime = DetonationTime / 8;
             this.bombPower = builder.bombPower;
             this.detonationTime = builder.detonationTime;
+        }
+        
+        public void Send(string message, GameObject receiver)
+        {
+            Console.WriteLine("Bomb sends message: " + message);
+            mediator.SendMessage(this, receiver, message);
+        }
+
+        public void Notify(string message)
+        {
+            Console.WriteLine("Bomb gets message: " + message);
         }
 
         public Bomb Clone()

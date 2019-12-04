@@ -10,6 +10,7 @@ using System.Media;
 using System.Diagnostics;
 using System.Collections;
 using BombermanMultiplayer.Objects;
+using BombermanMultiplayer.Mediator;
 
 namespace BombermanMultiplayer
 {
@@ -111,6 +112,17 @@ namespace BombermanMultiplayer
             base.Name = "Player";
         }
 
+        public void Send(string message, GameObject receiver)
+        {
+            Console.WriteLine("Player sends message: " + message);
+            mediator.SendMessage(this, receiver, message);
+        }
+
+        public void Notify(string message)
+        {
+            Console.WriteLine("Player gets message: " + message);
+        }
+
         #region Deplacements
 
 
@@ -176,14 +188,22 @@ namespace BombermanMultiplayer
 
         #region Actions
         
-        public void DropBomb(Tile[,] MapGrid, List<Bomb> BombsOnTheMap, Player otherplayer)
+        public void DropBomb(Tile[,] MapGrid, List<Bomb> BombsOnTheMap, Player otherplayer, ConcreteMediator mediator)
         {
             if (this.BombNumb > 0) //If player still has bombs
             {
                 if (!MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied)
                 {
                     //BombsOnTheMap.Add(new Bomb(this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero));
-                    BombsOnTheMap.Add((Bomb)bombFactory.Create(this.CasePosition[0], this.CasePosition[1], this.PlayerNumero));
+                    Bomb newBomb = (Bomb)bombFactory.Create(this.CasePosition[0], this.CasePosition[1], this.PlayerNumero);
+                    newBomb.mediator = mediator;
+                    this.mediator = mediator;
+                    mediator.BombMessages = newBomb;
+                    mediator.PlayerMessages = this;
+                    newBomb.Send("Bomb has been planted.", this);
+                    this.Send("Player received message", newBomb);
+
+                    BombsOnTheMap.Add(newBomb);
 
                     //Case obtain a reference to the bomb dropped on
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].bomb = BombsOnTheMap[BombsOnTheMap.Count-1];

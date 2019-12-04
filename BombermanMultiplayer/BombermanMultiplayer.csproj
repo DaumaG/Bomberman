@@ -100,10 +100,13 @@
     <Compile Include="Factories\WorldFactory.cs" />
     <Compile Include="Factories\PlayersFactory.cs" />
     <Compile Include="Flyweight\FlyweightFactory.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="Iterator\ConcreteContainer.cs" />
     <Compile Include="Iterator\ConcreteIterator.cs" />
     <Compile Include="Iterator\IContainer.cs" />
     <Compile Include="Iterator\IIterator.cs" />
+    <Compile Include="Mediator\ConcreteMediator.cs" />
+    <Compile Include="Mediator\IMediator.cs" />
     <Compile Include="Memento\CareTaker.cs" />
     <Compile Include="Memento\Memento.cs" />
     <Compile Include="Memento\Originator.cs" />
