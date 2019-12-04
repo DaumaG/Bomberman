@@ -14,9 +14,10 @@ using BombermanMultiplayer.Objects;
 namespace BombermanMultiplayer
 {
     using Observer = Observer;
+    using Decorator = Decorator;
 
     [Serializable]
-    public class Player : GameObject, Observer.IObserver
+    public class Player : GameObject, Observer.IObserver, Decorator.PlayerComponent
     {
         byte PlayerNumero;
 
@@ -412,7 +413,18 @@ namespace BombermanMultiplayer
             gameArea.playersSpawned(this);
         }
 
-    
+        public BonusType PowerBomb()
+        {
+            return BonusSlot[0] = BonusType.PowerBomb;
+        }
+
+        public short BonusTypeTimer()
+        {
+            return BonusTimer[0] = 10000;
+        }
+
+
+
 
         #endregion
     }
