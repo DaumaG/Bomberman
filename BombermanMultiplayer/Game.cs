@@ -202,6 +202,11 @@ namespace BombermanMultiplayer
                     loggerChain.logMessage(AbstractLogger.BOMB, "Player1 bomb created.");
                     Console.WriteLine("-----------------------------");
                     break;
+                case Keys.X:
+                    if (player1.Dead)
+                        break;
+                    player1.UndoBomb(this.world.MapGrid, this.BombsOnTheMap);
+                    break;
                 case Keys.A:
                     if (player1.Dead)
                         break;
@@ -244,6 +249,11 @@ namespace BombermanMultiplayer
                     loggerChain.logMessage(AbstractLogger.BOMB, "Player2 bomb created.");
                     Console.WriteLine("-----------------------------");
                     break;
+                case Keys.NumPad1:
+                    if (player2.Dead)
+                        break;
+                    player2.UndoBomb(this.world.MapGrid, this.BombsOnTheMap);
+                    break;
                 case Keys.Shift:
                     if (player2.Dead)
                         break;
@@ -259,7 +269,7 @@ namespace BombermanMultiplayer
                     long memoryBefore, memoryAfter;
                     var rnd = new Random();
 
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 7; j++)
                     {
                         Console.WriteLine("Size={0}", size);
                         Console.WriteLine();
@@ -360,6 +370,9 @@ namespace BombermanMultiplayer
                     break;
                 case Keys.Space:
                     sender.DropBomb(this.world.MapGrid, this.BombsOnTheMap, otherPlayer);
+                    break;
+                case Keys.NumPad1:
+                    sender.UndoBomb(this.world.MapGrid, this.BombsOnTheMap);
                     break;
                 case Keys.ControlKey:
                     sender.Deactivate(this.world.MapGrid, BombsOnTheMap, otherPlayer);

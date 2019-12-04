@@ -104,6 +104,9 @@
     <Compile Include="Iterator\ConcreteIterator.cs" />
     <Compile Include="Iterator\IContainer.cs" />
     <Compile Include="Iterator\IIterator.cs" />
+    <Compile Include="Memento\CareTaker.cs" />
+    <Compile Include="Memento\Memento.cs" />
+    <Compile Include="Memento\Originator.cs" />
     <Compile Include="Observer\GameArea.cs" />
     <Compile Include="Observer\IObserver.cs" />
     <Compile Include="Observer\Subject.cs" />

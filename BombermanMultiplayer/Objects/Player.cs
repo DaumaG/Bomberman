@@ -29,6 +29,9 @@ namespace BombermanMultiplayer
         private byte _Lifes = 1;
         private BombFactory bombFactory = new BombFactory();
 
+        Originator originatorBombs = new Originator();
+        CareTaker careTakerBombs = new CareTaker();
+
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
@@ -181,14 +184,35 @@ namespace BombermanMultiplayer
                 {
                     //BombsOnTheMap.Add(new Bomb(this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero));
                     BombsOnTheMap.Add((Bomb)bombFactory.Create(this.CasePosition[0], this.CasePosition[1], this.PlayerNumero));
+
                     //Case obtain a reference to the bomb dropped on
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].bomb = BombsOnTheMap[BombsOnTheMap.Count-1];
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied = true;
                     this.BombNumb--;
+
+                    //Change originator
+                    originatorBombs.BombIndex = BombsOnTheMap.Count - 1;
+                    originatorBombs.BombPosition = this.CasePosition;
+
+                    //Save state
+                    careTakerBombs.Memento = originatorBombs.SaveMemento();
                 }
             }
         }
-        
+
+        public void UndoBomb(Tile[,] MapGrid, List<Bomb> BombsOnTheMap)
+        {
+            if (this.BombNumb < 2) //If player doesn't have all bombs
+            {
+                // Restore state
+                originatorBombs.RestoreMemento(careTakerBombs.Memento);
+                BombsOnTheMap.RemoveAt(originatorBombs.BombIndex);
+                MapGrid[originatorBombs.BombPosition[0], originatorBombs.BombPosition[1]].bomb = null;
+                MapGrid[originatorBombs.BombPosition[0], originatorBombs.BombPosition[1]].Occupied = false;
+                this.BombNumb++;
+            }
+        }
+
         public void DrawPosition(Graphics g)
         {
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
