@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Media;
 using System.Diagnostics;
 using BombermanMultiplayer.Objects;
+using BombermanMultiplayer.ChainOfResponsibility;
 
 namespace BombermanMultiplayer
 {
@@ -25,13 +26,16 @@ namespace BombermanMultiplayer
         [NonSerialized]
         public Bomb bomb = null;
 
-        public int FireTime = 500; 
-               
+        public int FireTime = 500;
+
+        private AbstractLogger loggerChain { get; set; }
+
         public Tile(int x_, int y_, int totalFrame_, int frameWidth_, int frameHeigt_,  bool walkable, bool destroyable)
             : base(x_, y_, totalFrame_, frameWidth_, frameHeigt_)
         {
             Walkable = walkable;
             Destroyable = destroyable;
+            loggerChain = Logger.GetChain();
         }
 
 
@@ -66,6 +70,9 @@ namespace BombermanMultiplayer
             {
                 this.BonusHere.CheckCasePosition(this.Source.Width, this.Source.Height);
             }
+
+            loggerChain.logMessage(AbstractLogger.BONUS, "Bonus created.");
+            Console.WriteLine("-----------------------------");
         }
 
         #region Template pattern

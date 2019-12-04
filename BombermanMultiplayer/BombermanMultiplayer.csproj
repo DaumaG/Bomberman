@@ -76,6 +76,12 @@
     <Compile Include="Adapter\ISpecificMusicPlayer.cs" />
     <Compile Include="Adapter\WavPlayer.cs" />
     <Compile Include="Builder\BombBuilder.cs" />
+    <Compile Include="ChainOfResponsibility\AbstractLogger.cs" />
+    <Compile Include="ChainOfResponsibility\BonusLogger.cs" />
+    <Compile Include="ChainOfResponsibility\GameLogger.cs" />
+    <Compile Include="ChainOfResponsibility\Logger.cs" />
+    <Compile Include="ChainOfResponsibility\BombLogger.cs" />
+    <Compile Include="ChainOfResponsibility\PlayerLogger.cs" />
     <Compile Include="Command\Command.cs" />
     <Compile Include="Command\MoveCommand.cs" />
     <Compile Include="Decorator\Damage.cs" />

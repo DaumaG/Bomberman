@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using System.Diagnostics;
+using BombermanMultiplayer.ChainOfResponsibility;
 
 namespace BombermanMultiplayer
 {
@@ -29,6 +30,7 @@ namespace BombermanMultiplayer
         public List<Bomb> BombsOnTheMap;
         public System.Timers.Timer LogicTimer;
         private PlayersFactory playersFactory { get; set; }
+        private AbstractLogger loggerChain { get; set; }
         private WorldFactory worldFactory { get; set; }
 
         private FlyweightFactory flyweight = new FlyweightFactory();
@@ -36,15 +38,20 @@ namespace BombermanMultiplayer
         //ctor when picture box size is determined
         public Game(int hebergeurWidth, int hebergeurHeight)
         {
+            loggerChain = Logger.GetChain();
             playersFactory = new PlayersFactory();
             worldFactory = new WorldFactory();
-
             this.world = (World)worldFactory.Create(hebergeurWidth, hebergeurHeight, 1);
+
+            loggerChain.logMessage(AbstractLogger.GAME, "World created.");
+            Console.WriteLine("-----------------------------");
 
             player1 = (Player)playersFactory.Create(1, 1, 1);// new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
             player2 = (Player)playersFactory.Create(this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 2); // new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
             gameArea.attach(player1);
             player1.announce();
+            loggerChain.logMessage(AbstractLogger.PLAYER, "Player created.");
+            Console.WriteLine("-----------------------------");
             Decorator.PlayerComponent uc = new Decorator.Shied(player2);
             Debug.WriteLine(uc.PowerBomb());
             Debug.WriteLine(uc.BonusTypeTimer());
@@ -192,6 +199,8 @@ namespace BombermanMultiplayer
                     if (player1.Dead)
                         break;
                     player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2);
+                    loggerChain.logMessage(AbstractLogger.BOMB, "Player1 bomb created.");
+                    Console.WriteLine("-----------------------------");
                     break;
                 case Keys.A:
                     if (player1.Dead)
@@ -232,6 +241,8 @@ namespace BombermanMultiplayer
                     if (player2.Dead)
                         break;
                     player2.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player1);
+                    loggerChain.logMessage(AbstractLogger.BOMB, "Player2 bomb created.");
+                    Console.WriteLine("-----------------------------");
                     break;
                 case Keys.Shift:
                     if (player2.Dead)
