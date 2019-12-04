@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace BombermanMultiplayer.Command
 {
     using MovementDirection = BombermanMultiplayer.Player.MovementDirection;
+    [Serializable]
     class MoveCommand : Command
     {
         private MovementDirection _direction;

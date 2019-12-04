@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer.Iterator
 {
+    [Serializable]
     public class ConcreteContainer : IContainer
     {
         private ArrayList _items = new ArrayList();

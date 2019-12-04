@@ -12,7 +12,7 @@ using BombermanMultiplayer.Objects;
 
 namespace Observer
 {
-
+    [Serializable]
     public abstract class Subject
 	{
         private ConcreteContainer observers = new ConcreteContainer();

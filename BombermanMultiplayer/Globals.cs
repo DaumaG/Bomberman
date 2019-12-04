@@ -9,6 +9,6 @@ namespace BombermanMultiplayer
 {
     public static class Globals
     {
-        public static ConcreteMediator mediator = new ConcreteMediator();
+        public static ConcreteMediator mediator { get; set; }
     }
 }

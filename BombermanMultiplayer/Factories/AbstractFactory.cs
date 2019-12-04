@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer
 {
+    [Serializable]
     public abstract class AbstractFactory
     {
         public abstract GameObject Create();

@@ -7,6 +7,7 @@ using BombermanMultiplayer.Builder;
 
 namespace BombermanMultiplayer
 {
+    [Serializable]
     public class BombFactory : AbstractFactory
     {
         private BombBuilder builder = new BombBuilder();

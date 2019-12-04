@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer.Mediator
 {
+    [Serializable]
     public class ConcreteMediator : IMediator
     {
         private Player _player;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer.Builder
 {
+    [Serializable]
     public class BombBuilder
     {
         public int detonationTime;

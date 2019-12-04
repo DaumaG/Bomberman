@@ -337,16 +337,20 @@ namespace BombermanMultiplayer
             {
                 // send to all
 
-                ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
-                Connection item = (Connection)connectionsIterator.First();
+                ConcreteIterator connectionsIterator = (ConcreteIterator) connections.CreateIterator();
+                Connection item = (Connection) connectionsIterator.First();
                 while (item != null)
                 {
                     item.formatter.Serialize(item.stream, obj);
                     item.stream.Flush();
-                    item = (Connection)connectionsIterator.Next();
+                    item = (Connection) connectionsIterator.Next();
                 }
             }
-            catch(Exception) { }
+            catch (Exception ex)
+            {
+                //TODO: Might throw error here. Leaving for debug purpose
+                int a = 5;
+            }
 
         }
         /// <summary>

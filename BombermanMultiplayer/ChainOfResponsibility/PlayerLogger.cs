@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer.ChainOfResponsibility
 {
+    [Serializable]
     public class PlayerLogger : AbstractLogger
     {
         public PlayerLogger(int level)

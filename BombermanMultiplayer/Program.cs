@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BombermanMultiplayer.Mediator;
 
 namespace BombermanMultiplayer
 {
@@ -17,6 +18,7 @@ namespace BombermanMultiplayer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Globals.mediator = new ConcreteMediator();
             Application.Run(new MainMenu());
         }
     }
