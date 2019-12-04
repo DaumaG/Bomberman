@@ -63,9 +63,17 @@ namespace BombermanMultiplayer
 
         public void RecvData(ref Packet obj)
         {
-            while (stream.DataAvailable)
+            try
             {
-                obj = (Packet)formatter.Deserialize(stream);
+                while (stream.DataAvailable)
+                {
+                    obj = (Packet) formatter.Deserialize(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: Might throw error here. Leaving for debug purpose
+                int a = 5;
             }
         }
 

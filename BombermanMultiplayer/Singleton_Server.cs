@@ -220,14 +220,13 @@ namespace BombermanMultiplayer
                             item.sock.Client.Close();
                             item = (Connection)connectionsIterator.Next();
                         }
+                        server.Stop();
+                        token.ThrowIfCancellationRequested();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         //throw;
                     }
-                    
-                    server.Stop();
-                    token.ThrowIfCancellationRequested();
                 }
             }          
         }
@@ -298,8 +297,6 @@ namespace BombermanMultiplayer
                 connections.Add(conn);
                 //Send Player list to all players
                 SendPlayersList();
-
-                
             }
         }
 
@@ -359,16 +356,23 @@ namespace BombermanMultiplayer
         /// <param name="obj">Class which encapsulates the datas</param>
         public void RecvData(ref Packet obj)
         {
-
-            ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
-            Connection item = (Connection)connectionsIterator.First();
-            while (item != null)
-            {
-                while (item.stream.DataAvailable)
+            try 
+            { 
+                ConcreteIterator connectionsIterator = (ConcreteIterator)connections.CreateIterator();
+                Connection item = (Connection)connectionsIterator.First();
+                while (item != null)
                 {
-                    obj = (Packet)item.formatter.Deserialize(item.stream);
+                    while (item.stream.DataAvailable)
+                    {
+                        obj = (Packet)item.formatter.Deserialize(item.stream);
+                    }
+                    item = (Connection)connectionsIterator.Next();
                 }
-                item = (Connection)connectionsIterator.Next();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Might throw error here. Leaving for debug purpose
+                int a = 5;
             }
         }
 
