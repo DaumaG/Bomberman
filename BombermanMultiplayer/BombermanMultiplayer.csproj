@@ -150,6 +150,15 @@
     <Compile Include="Client.cs" />
     <Compile Include="Singleton_Server.cs" />
     <Compile Include="Strategy\CheckCollision.cs" />
+    <Compile Include="Visitor\BackgroundVisitor.cs" />
+    <Compile Include="Visitor\BombPicture.cs" />
+    <Compile Include="Visitor\CustomPicture.cs" />
+    <Compile Include="Visitor\ExplosionPicture.cs" />
+    <Compile Include="Visitor\ImageLoadVisitor.cs" />
+    <Compile Include="Visitor\IVisitor.cs" />
+    <Compile Include="Visitor\Monitor.cs" />
+    <Compile Include="Visitor\PlayerPicture.cs" />
+    <Compile Include="Visitor\VisibilitiesVisitor.cs" />
     <Compile Include="World\Tile.cs" />
     <Compile Include="World\World.cs" />
     <EmbeddedResource Include="GameWindow.resx">

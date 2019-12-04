@@ -1,5 +1,6 @@
 ﻿using BombermanMultiplayer.Adapter;
 using BombermanMultiplayer.Facade;
+using BombermanMultiplayer.Visitor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,27 @@ namespace BombermanMultiplayer
     public partial class MainMenu : Form
     {
         private MusicMaker _musicMaker { get; set; }
+        private IVisitor _visibilitiesVisitor { get; set; }
+        private IVisitor _backgroundVisitor { get; set; }
+        private IVisitor _imageLoadVisitor { get; set; }
+        private Monitor _monitor { get; set; }
         public MainMenu()
         {
             InitializeComponent();
             _musicMaker = new MusicMaker();
+
+            #region Visitor
+
+            _visibilitiesVisitor = new VisibilitiesVisitor();
+            _backgroundVisitor = new BackgroundVisitor();
+            _imageLoadVisitor = new ImageLoadVisitor();
+
+            _monitor = new Monitor(ExplosionPictureBox, BombermanPictureBox, BombPictureBox);
+            _monitor.RespondToVisit(_imageLoadVisitor);
+            _monitor.RespondToVisit(_backgroundVisitor);
+            _monitor.RespondToVisit(_visibilitiesVisitor);
+
+            #endregion
         }
 
         private void btnLocalGame_Click(object sender, EventArgs e)
