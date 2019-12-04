@@ -12,8 +12,6 @@ namespace BombermanMultiplayer
 
         public CheckCollision GetStrategy(Player.MovementDirection direction)
         {
-            // Uses "lazy initialization"
-            
             if (_strategies.ContainsKey(direction))
             {
                 return _strategies[direction];
